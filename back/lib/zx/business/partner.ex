@@ -22,7 +22,7 @@ defmodule Zx.Business.Partner do
     |> validate_required([:trading_name, :owner_name, :document, :coverage_area, :address])
   end
 
-  defp put_address(changeset, %{address: %{lat: lat, lng: lng}} = attrs) do
+  defp put_address(changeset, %{address: %{"lat" => lat, "lng" => lng}}) do
     # Why choose SRID 4326? https://gis.stackexchange.com/questions/131363/choosing-srid-and-what-is-its-meaning
     change(changeset, address: %Geo.Point{coordinates: {lat, lng}, srid: 4326 })
   end
@@ -31,8 +31,9 @@ defmodule Zx.Business.Partner do
     add_error(changeset, :address, "Invalid Format. Address must be a object with 'lat' and 'lng' properties")
   end
 
-  defp put_coverage_area(changeset, %{coverage_area: coverage_area} = attrs) do
-    if is_list(coverage_area) and Enum.all?(List.flatten(coverage_area), fn {lat, lng} -> is_number(lat) and is_number(lng) end) do
+  defp put_coverage_area(changeset, %{coverage_area: coverage_area}) do
+    if is_list(coverage_area) and Enum.all?(List.flatten(coverage_area), &is_number/1) do
+      coverage_area = Enum.map(coverage_area, fn sublist -> Enum.map(sublist, fn [lat, lng] -> {lat, lng} end) end)
       change(changeset, coverage_area: %Geo.Polygon{coordinates: coverage_area, srid: 4326 })
     else
       add_error(changeset, :coverage_area, "Invalid Format. Coverage Area must be a list of coordinates")

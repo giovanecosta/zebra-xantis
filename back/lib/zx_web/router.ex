@@ -7,5 +7,7 @@ defmodule ZxWeb.Router do
 
   scope "/api", ZxWeb do
     pipe_through :api
+
+    resources "/partners", PartnerController, except: [:new, :edit]
   end
 end

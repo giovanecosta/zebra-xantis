@@ -10,15 +10,15 @@ defmodule Zx.BusinessTest do
       trading_name: "some trading_name",
       owner_name: "some owner_name",
       document: "some document",
-      address: %{lat: 10.2, lng: 20.5},
-      coverage_area: [[{23, 45}, {12.1, 23}, {45,87}, {23.6,23}, {23, 45}]]
+      address: %{"lat" => 10.2, "lng" => 20.5},
+      coverage_area: [[[23, 45], [12.1, 23], [45,87], [23.6,23], [23, 45]]]
     }
     @update_attrs %{
       trading_name: "some updated trading_name",
       owner_name: "some updated owner_name",
       document: "some updated document",
-      address: %{lat: 16.8, lng: 28},
-      coverage_area: [[{12.1, 23}, {11, 11}, {34, 23}, {54, 76}, {12.1, 23}]]
+      address: %{"lat" => 16.8, "lng" => 28},
+      coverage_area: [[[12.1, 23], [11, 11], [34, 23], [54, 76], [12.1, 23]]]
     }
     @invalid_attrs %{
       trading_name: nil,
