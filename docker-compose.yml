@@ -2,7 +2,7 @@ version: '2'
 
 services:
   postgres:
-    image: 'postgres:10.3-alpine'
+    image: 'mdillon/postgis:10-alpine'
     ports:
       - '5432:5432'
     environment:
