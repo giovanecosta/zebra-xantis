@@ -16,6 +16,9 @@ defmodule Zx.Repo.Migrations.CreatePartners do
     end
 
     create unique_index(:partners, [:document])
+
+    execute "CREATE INDEX partners_coverage_area_idx ON partners USING GIST (coverage_area)"
+    execute "CREATE INDEX partners_address_idx ON partners USING GIST (address)"
   end
 
   def down do
@@ -23,5 +26,7 @@ defmodule Zx.Repo.Migrations.CreatePartners do
     drop table(:partners)
 
     execute "DROP EXTENSION IF EXISTS postgis"
+    execute "DROP INDEX partners_coverage_area_idx"
+    execute "DROP INDEX partners_address_idx"
   end
 end
