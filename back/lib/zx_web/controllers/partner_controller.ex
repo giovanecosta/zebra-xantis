@@ -11,6 +11,11 @@ defmodule ZxWeb.PartnerController do
     render(conn, "index.json", partners: partners)
   end
 
+  def search_by_location(conn, %{"lat" => lat, "lng" => lng}) do
+    partners = Business.list_covering_partners(lat, lng)
+    render(conn, "index.json", partners: partners)
+  end
+
   def create(conn, %{"partner" => partner_params}) do
 
     with {:ok, %Partner{} = partner} <- Business.create_partner(map_keys_to_atom(partner_params)) do

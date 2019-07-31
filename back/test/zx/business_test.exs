@@ -11,7 +11,7 @@ defmodule Zx.BusinessTest do
       owner_name: "some owner_name",
       document: "some document",
       address: %{"lat" => 10.2, "lng" => 20.5},
-      coverage_area: [[[23, 45], [12.1, 23], [45,87], [23.6,23], [23, 45]]]
+      coverage_area: [[[23, 45], [12.1, 23], [45, 87], [23.6, 23], [23, 45]]]
     }
     @update_attrs %{
       trading_name: "some updated trading_name",
@@ -26,6 +26,22 @@ defmodule Zx.BusinessTest do
       document: nil,
       address: {10.2, 20.5},
       coverage_area: [[{"asd", "dhj"}]]
+    }
+
+    @center_square_partner %{
+      trading_name: "Center Square Partner",
+      owner_name: "Test Suite",
+      document: "35.685.536/0001-72",
+      address: %{"lat" => 0, "lng" => 0},
+      coverage_area: [[[10, 10], [10, -10], [-10, -10], [-10, 10], [10, 10]]]
+    }
+
+    @top_right_square_partner %{
+      trading_name: "Top Right Square Partner",
+      owner_name: "Test Suite",
+      document: "34.413.275/0001-79",
+      address: %{"lat" => 10, "lng" => 10},
+      coverage_area: [[[20, 20], [20, 0], [0, 0], [0, 20], [20, 20]]]
     }
 
     def partner_fixture(attrs \\ %{}) do
@@ -78,5 +94,23 @@ defmodule Zx.BusinessTest do
       partner = partner_fixture()
       assert %Ecto.Changeset{} = Business.change_partner(partner)
     end
+
+
+    # Relevant tests for the job application
+
+    test "list_covering_partners/2" do
+      assert {:ok, %Partner{} = partner1} = Business.create_partner(@center_square_partner)
+      assert {:ok, %Partner{} = partner2} = Business.create_partner(@top_right_square_partner)
+
+      assert [partner1, partner2] == Business.list_covering_partners(2, 2)
+
+      assert [partner1] == Business.list_covering_partners(2, -2)
+
+      assert [partner2] == Business.list_covering_partners(12, 12)
+
+      assert [] == Business.list_covering_partners(-12, -12)
+      assert [] == Business.list_covering_partners(12, -5)
+    end
+
   end
 end

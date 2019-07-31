@@ -20,6 +20,23 @@ defmodule ZxWeb.PartnerControllerTest do
   }
   @invalid_attrs %{address: nil, coverage_area: nil, document: nil, owner_name: nil, trading_name: nil}
 
+  @center_square_partner %{
+    trading_name: "Center Square Partner",
+    owner_name: "Test Suite",
+    document: "35.685.536/0001-72",
+    address: %{"lat" => 0, "lng" => 0},
+    coverage_area: [[[10, 10], [10, -10], [-10, -10], [-10, 10], [10, 10]]]
+  }
+
+  @top_right_square_partner %{
+    trading_name: "Top Right Square Partner",
+    owner_name: "Test Suite",
+    document: "34.413.275/0001-79",
+    address: %{"lat" => 10, "lng" => 10},
+    coverage_area: [[[20, 20], [20, 0], [0, 0], [0, 20], [20, 20]]]
+  }
+
+
   def fixture(:partner) do
     {:ok, partner} = Business.create_partner(@create_attrs)
     partner
@@ -107,6 +124,42 @@ defmodule ZxWeb.PartnerControllerTest do
         get(conn, Routes.partner_path(conn, :show, partner))
       end
     end
+  end
+
+  describe "search partner by location" do
+    setup [:create_square_partners]
+
+    test "two partners covering", %{conn: conn, partners: [partner1, partner2]} do
+      conn = get(conn, Routes.partner_path(conn, :search_by_location, 5, 3))
+
+      assert %{"data" => [p1, p2]} = json_response(conn, 200)
+
+      assert p1["id"] == partner1.id
+      assert p2["id"] == partner2.id
+
+    end
+
+    test "top right partner covering", %{conn: conn, partners: [_, partner2]} do
+      conn = get(conn, Routes.partner_path(conn, :search_by_location, 15, 8))
+
+      assert %{"data" => [p1]} = json_response(conn, 200)
+
+      assert p1["id"] == partner2.id
+
+    end
+
+    test "no partner covering", %{conn: conn, partners: _} do
+      conn = get(conn, Routes.partner_path(conn, :search_by_location, -15, 8))
+
+      assert %{"data" => []} = json_response(conn, 200)
+
+    end
+  end
+
+  defp create_square_partners(_) do
+    {:ok, partner1} = Business.create_partner(@center_square_partner)
+    {:ok, partner2} = Business.create_partner(@top_right_square_partner)
+    {:ok, partners: [partner1, partner2]}
   end
 
   defp create_partner(_) do

@@ -4,6 +4,7 @@ defmodule Zx.Business do
   """
 
   import Ecto.Query, warn: false
+  import Geo.PostGIS
   alias Zx.Repo
 
   alias Zx.Business.Partner
@@ -19,6 +20,44 @@ defmodule Zx.Business do
   """
   def list_partners do
     Repo.all(Partner)
+  end
+
+  @doc """
+  Returns the nearest partner given a specific location.
+
+  ## Examples
+
+      iex> get_nearest_partner(-44.23523, -22.345622)
+      %Partner{}
+
+  """
+  def get_nearest_partner(lat, lng) do
+    point = %Geo.Point{coordinates: {lat, lng}, srid: 4326}
+
+    query = from p in Partner,
+              limit: 1,
+              order_by: st_distance(p.address, ^point),
+              select: %{p | distance: st_distance(p.address, ^point)}
+    Repo.all(query)
+  end
+
+  @doc """
+  Returns the list of partners covering a given point.
+
+  ## Examples
+
+      iex> get_covering_partners(-44.23523, -22.345622)
+      [%Partner{}, ...]
+
+  """
+  def list_covering_partners(lat, lng) do
+    point = %Geo.Point{coordinates: {lat, lng}, srid: 4326}
+
+    query = from p in Partner,
+              where: st_contains(p.coverage_area, ^point),
+              select: p
+              #select: %{p | distance: st_distance(p.address, ^point)}
+    Repo.all(query)
   end
 
   @doc """

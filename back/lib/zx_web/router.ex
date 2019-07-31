@@ -9,5 +9,7 @@ defmodule ZxWeb.Router do
     pipe_through :api
 
     resources "/partners", PartnerController, except: [:new, :edit]
+
+    get "/partners_by_location/:lat/:lng", PartnerController, :search_by_location
   end
 end
