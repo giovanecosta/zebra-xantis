@@ -102,14 +102,27 @@ defmodule Zx.BusinessTest do
       assert {:ok, %Partner{} = partner1} = Business.create_partner(@center_square_partner)
       assert {:ok, %Partner{} = partner2} = Business.create_partner(@top_right_square_partner)
 
-      assert [partner1, partner2] == Business.list_covering_partners(2, 2)
+      assert [p1, p2] = Business.list_covering_partners(2, 2)
 
-      assert [partner1] == Business.list_covering_partners(2, -2)
+      assert [p1.id, p2.id] == [partner1.id, partner2.id]
 
-      assert [partner2] == Business.list_covering_partners(12, 12)
+      assert partner1.id == hd(Business.list_covering_partners(2, -2)).id
+
+      assert partner2.id == hd(Business.list_covering_partners(12, 12)).id
 
       assert [] == Business.list_covering_partners(-12, -12)
       assert [] == Business.list_covering_partners(12, -5)
+    end
+
+    test "get_nearest_partner/3" do
+      assert {:ok, %Partner{} = partner1} = Business.create_partner(@center_square_partner)
+      assert {:ok, %Partner{} = partner2} = Business.create_partner(@top_right_square_partner)
+
+      assert partner1.id == Business.get_nearest_partner(3, 2).id
+      assert partner2.id == Business.get_nearest_partner(35, 42).id
+
+      assert nil == Business.get_nearest_partner(35, 42, true)
+
     end
 
   end

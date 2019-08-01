@@ -23,7 +23,7 @@ defmodule Zx.Business do
   end
 
   @doc """
-  Returns the nearest partner given a specific location.
+  Returns the nearest partner (covering is optional) given a specific location.
 
   ## Examples
 
@@ -31,14 +31,21 @@ defmodule Zx.Business do
       %Partner{}
 
   """
-  def get_nearest_partner(lat, lng) do
+  def get_nearest_partner(lat, lng, covering \\ false) do
     point = %Geo.Point{coordinates: {lat, lng}, srid: 4326}
 
     query = from p in Partner,
               limit: 1,
               order_by: st_distance(p.address, ^point),
               select: %{p | distance: st_distance(p.address, ^point)}
+
+    query = if covering do
+      from p in query, where: st_contains(p.coverage_area, ^point)
+    else
+      query
+    end
     Repo.all(query)
+      |> List.first
   end
 
   @doc """
@@ -55,8 +62,8 @@ defmodule Zx.Business do
 
     query = from p in Partner,
               where: st_contains(p.coverage_area, ^point),
-              select: p
-              #select: %{p | distance: st_distance(p.address, ^point)}
+              select: %{p | distance: st_distance(p.address, ^point)}
+
     Repo.all(query)
   end
 

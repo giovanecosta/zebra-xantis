@@ -10,6 +10,8 @@ defmodule Zx.Business.Partner do
     field :coverage_area, Geo.PostGIS.Geometry
     field :address,       Geo.PostGIS.Geometry
 
+    field :distance,      :float, virtual: true
+
     timestamps()
   end
 

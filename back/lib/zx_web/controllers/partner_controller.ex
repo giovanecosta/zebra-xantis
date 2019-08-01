@@ -16,6 +16,11 @@ defmodule ZxWeb.PartnerController do
     render(conn, "index.json", partners: partners)
   end
 
+  def get_nearest_covering(conn, %{"lat" => lat, "lng" => lng}) do
+    partner = Business.get_nearest_partner(lat, lng, true)
+    render(conn, "show.json", partner: partner)
+  end
+
   def create(conn, %{"partner" => partner_params}) do
 
     with {:ok, %Partner{} = partner} <- Business.create_partner(map_keys_to_atom(partner_params)) do

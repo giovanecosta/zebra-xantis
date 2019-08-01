@@ -156,6 +156,35 @@ defmodule ZxWeb.PartnerControllerTest do
     end
   end
 
+  describe "get nearest covering partner" do
+    setup [:create_square_partners]
+
+    test "center square near", %{conn: conn, partners: [partner1, _]} do
+      conn = get(conn, Routes.partner_path(conn, :get_nearest_covering, 5, 3))
+
+      assert %{"data" => p1} = json_response(conn, 200)
+
+      assert p1["id"] == partner1.id
+    end
+
+    test "top right near", %{conn: conn, partners: [_, partner2]} do
+      conn = get(conn, Routes.partner_path(conn, :get_nearest_covering, 15, 8))
+
+      assert %{"data" => p1} = json_response(conn, 200)
+
+      assert p1["id"] == partner2.id
+    end
+
+    test "nearest partner no covering", %{conn: conn, partners: _} do
+      conn = get(conn, Routes.partner_path(conn, :get_nearest_covering, 25, 8))
+
+      assert %{"data" => p1} = json_response(conn, 200)
+
+      assert p1 == nil
+    end
+
+  end
+
   defp create_square_partners(_) do
     {:ok, partner1} = Business.create_partner(@center_square_partner)
     {:ok, partner2} = Business.create_partner(@top_right_square_partner)
