@@ -33,7 +33,7 @@ defmodule Zx.Business.Partner do
     add_error(changeset, :address, "Invalid Format. Address must be a object with 'lat' and 'lng' properties")
   end
 
-  defp put_coverage_area(changeset, %{coverage_area: coverage_area}) do
+  defp put_coverage_area(changeset, %{coverage_area: [coverage_area]}) do
     if is_list(coverage_area) and Enum.all?(List.flatten(coverage_area), &is_number/1) do
       coverage_area = Enum.map(coverage_area, fn sublist -> Enum.map(sublist, fn [lat, lng] -> {lat, lng} end) end)
       change(changeset, coverage_area: %Geo.Polygon{coordinates: coverage_area, srid: 4326 })

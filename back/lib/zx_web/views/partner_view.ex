@@ -17,9 +17,9 @@ defmodule ZxWeb.PartnerView do
       document: partner.document,
       coverageArea: %{
         type: "MultiPolygon",
-        coordinates: Enum.map(partner.coverage_area.coordinates, fn sublist ->
+        coordinates: [Enum.map(partner.coverage_area.coordinates, fn sublist ->
           Enum.map(sublist, &Tuple.to_list/1)
-        end)
+        end)]
       },
       address: %{
         type: "Point",

@@ -6,14 +6,14 @@ defmodule ZxWeb.PartnerControllerTest do
 
   @create_attrs %{
     address: %{"lat" => 10.2, "lng" => 20.5},
-    coverage_area: [[[23, 45], [12.1, 23], [45.4, 87], [23.6, 23], [23, 45]]],
+    coverage_area: [[[[23, 45], [12.1, 23], [45.4, 87], [23.6, 23], [23, 45]]]],
     document: "some document",
     owner_name: "some owner_name",
     trading_name: "some trading_name"
   }
   @update_attrs %{
     address: %{"lat" => 16.8, "lng" => 28},
-    coverage_area: [[[12.1, 23], [-11, 11], [34, 23], [54.2, 76], [12.1, 23]]],
+    coverage_area: [[[[12.1, 23], [-11, 11], [34, 23], [54.2, 76], [12.1, 23]]]],
     document: "some updated document",
     owner_name: "some updated owner_name",
     trading_name: "some updated trading_name"
@@ -25,7 +25,7 @@ defmodule ZxWeb.PartnerControllerTest do
     owner_name: "Test Suite",
     document: "35.685.536/0001-72",
     address: %{"lat" => 0, "lng" => 0},
-    coverage_area: [[[10, 10], [10, -10], [-10, -10], [-10, 10], [10, 10]]]
+    coverage_area: [[[[10, 10], [10, -10], [-10, -10], [-10, 10], [10, 10]]]]
   }
 
   @top_right_square_partner %{
@@ -33,7 +33,7 @@ defmodule ZxWeb.PartnerControllerTest do
     owner_name: "Test Suite",
     document: "34.413.275/0001-79",
     address: %{"lat" => 10, "lng" => 10},
-    coverage_area: [[[20, 20], [20, 0], [0, 0], [0, 20], [20, 20]]]
+    coverage_area: [[[[20, 20], [20, 0], [0, 0], [0, 20], [20, 20]]]]
   }
 
 
@@ -68,7 +68,7 @@ defmodule ZxWeb.PartnerControllerTest do
                },
                "coverageArea" => %{
                   "type" => "MultiPolygon",
-                  "coordinates" => [[[23.0, 45.0], [12.1, 23.0], [45.4, 87.0], [23.6, 23.0], [23.0, 45.0]]]
+                  "coordinates" => [[[[23.0, 45.0], [12.1, 23.0], [45.4, 87.0], [23.6, 23.0], [23.0, 45.0]]]]
                },
                "document" => "some document",
                "ownerName" => "some owner_name",
@@ -99,7 +99,7 @@ defmodule ZxWeb.PartnerControllerTest do
                 },
                "coverageArea" => %{
                   "type" => "MultiPolygon",
-                  "coordinates" => [[[12.1, 23.0], [-11.0, 11.0], [34.0, 23.0], [54.2, 76.0], [12.1, 23.0]]]
+                  "coordinates" => [[[[12.1, 23.0], [-11.0, 11.0], [34.0, 23.0], [54.2, 76.0], [12.1, 23.0]]]]
                },
                "document" => "some updated document",
                "ownerName" => "some updated owner_name",

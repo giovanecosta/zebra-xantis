@@ -11,14 +11,14 @@ defmodule Zx.BusinessTest do
       owner_name: "some owner_name",
       document: "some document",
       address: %{"lat" => 10.2, "lng" => 20.5},
-      coverage_area: [[[23, 45], [12.1, 23], [45, 87], [23.6, 23], [23, 45]]]
+      coverage_area: [[[[23, 45], [12.1, 23], [45, 87], [23.6, 23], [23, 45]]]]
     }
     @update_attrs %{
       trading_name: "some updated trading_name",
       owner_name: "some updated owner_name",
       document: "some updated document",
       address: %{"lat" => 16.8, "lng" => 28},
-      coverage_area: [[[12.1, 23], [11, 11], [34, 23], [54, 76], [12.1, 23]]]
+      coverage_area: [[[[12.1, 23], [11, 11], [34, 23], [54, 76], [12.1, 23]]]]
     }
     @invalid_attrs %{
       trading_name: nil,
@@ -33,7 +33,7 @@ defmodule Zx.BusinessTest do
       owner_name: "Test Suite",
       document: "35.685.536/0001-72",
       address: %{"lat" => 0, "lng" => 0},
-      coverage_area: [[[10, 10], [10, -10], [-10, -10], [-10, 10], [10, 10]]]
+      coverage_area: [[[[10, 10], [10, -10], [-10, -10], [-10, 10], [10, 10]]]]
     }
 
     @top_right_square_partner %{
@@ -41,7 +41,7 @@ defmodule Zx.BusinessTest do
       owner_name: "Test Suite",
       document: "34.413.275/0001-79",
       address: %{"lat" => 10, "lng" => 10},
-      coverage_area: [[[20, 20], [20, 0], [0, 0], [0, 20], [20, 20]]]
+      coverage_area: [[[[20, 20], [20, 0], [0, 0], [0, 20], [20, 20]]]]
     }
 
     def partner_fixture(attrs \\ %{}) do
