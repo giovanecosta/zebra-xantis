@@ -37,7 +37,7 @@ defmodule Zx.Business do
     query = from p in Partner,
               limit: 1,
               order_by: st_distance(p.address, ^point),
-              select: %{p | distance: st_distance(p.address, ^point)}
+              select: %{p | distance: st_distance_in_meters(p.address, ^point)}
 
     query = if covering do
       from p in query, where: st_contains(p.coverage_area, ^point)
@@ -62,7 +62,7 @@ defmodule Zx.Business do
 
     query = from p in Partner,
               where: st_contains(p.coverage_area, ^point),
-              select: %{p | distance: st_distance(p.address, ^point)}
+              select: %{p | distance: st_distance_in_meters(p.address, ^point)}
 
     Repo.all(query)
   end

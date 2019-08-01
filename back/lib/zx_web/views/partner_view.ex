@@ -15,6 +15,7 @@ defmodule ZxWeb.PartnerView do
       tradingName: partner.trading_name,
       ownerName: partner.owner_name,
       document: partner.document,
+      distance: partner.distance,
       coverageArea: %{
         type: "MultiPolygon",
         coordinates: [Enum.map(partner.coverage_area.coordinates, fn sublist ->
