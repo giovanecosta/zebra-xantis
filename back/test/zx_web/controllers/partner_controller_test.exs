@@ -11,13 +11,35 @@ defmodule ZxWeb.PartnerControllerTest do
     owner_name: "some owner_name",
     trading_name: "some trading_name"
   }
-  @update_attrs %{
-    address: %{"lat" => 16.8, "lng" => 28},
-    coverage_area: [[[[12.1, 23], [-11, 11], [34, 23], [54.2, 76], [12.1, 23]]]],
-    document: "some updated document",
-    owner_name: "some updated owner_name",
-    trading_name: "some updated trading_name"
+
+  @create_json_attrs %{
+    "address" => %{
+      "type" => "Point",
+      "coordinates" => [10.2, 20.5]
+    },
+    "coverageArea" => %{
+      "type" => "MultiPolygon",
+      "coordinates" => [[[[23, 45], [12.1, 23], [45.4, 87], [23.6, 23], [23, 45]]]]
+    },
+    "document" => "some document",
+    "ownerName" => "some owner_name",
+    "tradingName" => "some trading_name"
   }
+
+  @update_json_attrs %{
+    "address" => %{
+      "type" => "Point",
+      "coordinates" => [16.8, 28]
+    },
+    "coverageArea" => %{
+      "type" => "MultiPolygon",
+      "coordinates" => [[[[12.1, 23], [-11, 11], [34, 23], [54.2, 76], [12.1, 23]]]]
+    },
+    "document" => "some updated document",
+    "ownerName" => "some updated owner_name",
+    "tradingName" => "some updated trading_name"
+  }
+
   @invalid_attrs %{address: nil, coverage_area: nil, document: nil, owner_name: nil, trading_name: nil}
 
   @center_square_partner %{
@@ -47,21 +69,25 @@ defmodule ZxWeb.PartnerControllerTest do
   end
 
   describe "index" do
-    test "lists all partners", %{conn: conn} do
+    setup [:create_square_partners]
+
+    test "GET /api/partners", %{conn: conn} do
       conn = get(conn, Routes.partner_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
+        |> doc(description: "List all partners")
+      assert length(json_response(conn, 200)["data"]) == 2
     end
   end
 
   describe "create partner" do
-    test "renders partner when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.partner_path(conn, :create), partner: @create_attrs)
+    test "POST /api/partners", %{conn: conn} do
+      conn = post(conn, Routes.partner_path(conn, :create), partner: @create_json_attrs)
+        |> doc(description: "Create partner")
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, Routes.partner_path(conn, :show, id))
 
       assert %{
-               "id" => id,
+               "id" => ^id,
                "address" => %{
                   "type" => "Point",
                   "coordinates" => [10.2, 20.5]
@@ -82,29 +108,40 @@ defmodule ZxWeb.PartnerControllerTest do
     end
   end
 
+  describe "show partner" do
+    setup [:create_partner]
+
+    test "GET /api/partners/:id", %{conn: conn, partner: %Partner{id: id}} do
+      conn = get(conn, Routes.partner_path(conn, :show, id))
+        |> doc(description: "Show partner")
+      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+
+    end
+  end
+
   describe "update partner" do
     setup [:create_partner]
 
-    test "renders partner when data is valid", %{conn: conn, partner: %Partner{id: id} = partner} do
-      conn = put(conn, Routes.partner_path(conn, :update, partner), partner: @update_attrs)
+    test "PUT /api/partners/:id", %{conn: conn, partner: %Partner{id: id} = partner} do
+      conn = put(conn, Routes.partner_path(conn, :update, partner), partner: @update_json_attrs)
+        |> doc(description: "Update partner")
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get(conn, Routes.partner_path(conn, :show, id))
 
       assert %{
                "id" => id,
                "address" => %{
                   "type" => "Point",
-                  "coordinates" => [16.8, 28.0]
+                  "coordinates" => [16.8, 28]
                 },
                "coverageArea" => %{
                   "type" => "MultiPolygon",
-                  "coordinates" => [[[[12.1, 23.0], [-11.0, 11.0], [34.0, 23.0], [54.2, 76.0], [12.1, 23.0]]]]
+                  "coordinates" => [[[[12.1, 23], [-11, 11], [34, 23], [54.2, 76], [12.1, 23]]]]
                },
+               "distance" => nil,
                "document" => "some updated document",
                "ownerName" => "some updated owner_name",
                "tradingName" => "some updated trading_name"
-             } = json_response(conn, 200)["data"]
+             } == json_response(conn, 200)["data"]
     end
 
     test "renders errors when data is invalid", %{conn: conn, partner: partner} do
@@ -116,8 +153,9 @@ defmodule ZxWeb.PartnerControllerTest do
   describe "delete partner" do
     setup [:create_partner]
 
-    test "deletes chosen partner", %{conn: conn, partner: partner} do
+    test "DELETE /api/partners/:id", %{conn: conn, partner: partner} do
       conn = delete(conn, Routes.partner_path(conn, :delete, partner))
+        |> doc(description: "Delete partner")
       assert response(conn, 204)
 
       assert_error_sent 404, fn ->
@@ -161,6 +199,7 @@ defmodule ZxWeb.PartnerControllerTest do
 
     test "center square near", %{conn: conn, partners: [partner1, _]} do
       conn = get(conn, Routes.partner_path(conn, :get_nearest_covering, 5, 3))
+        |> doc("Get nearest partner by location (latitude, longitude)")
 
       assert %{"data" => p1} = json_response(conn, 200)
 
