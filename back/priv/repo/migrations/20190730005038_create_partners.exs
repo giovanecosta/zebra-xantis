@@ -23,10 +23,11 @@ defmodule Zx.Repo.Migrations.CreatePartners do
 
   def down do
     drop index(:partners, [:document])
+    execute "DROP INDEX partners_coverage_area_idx"
+    execute "DROP INDEX partners_address_idx"
+
     drop table(:partners)
 
     execute "DROP EXTENSION IF EXISTS postgis"
-    execute "DROP INDEX partners_coverage_area_idx"
-    execute "DROP INDEX partners_address_idx"
   end
 end
