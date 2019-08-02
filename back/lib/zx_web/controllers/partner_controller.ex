@@ -4,6 +4,8 @@ defmodule ZxWeb.PartnerController do
   alias Zx.Business
   alias Zx.Business.Partner
 
+  import Zx.Business.PartnerHelpers
+
   action_fallback ZxWeb.FallbackController
 
   def index(conn, _params) do
@@ -22,8 +24,10 @@ defmodule ZxWeb.PartnerController do
   end
 
   def create(conn, %{"partner" => partner_params}) do
-
-    with {:ok, %Partner{} = partner} <- Business.create_partner(map_keys_to_atom(partner_params)) do
+    partner_params = partner_params
+    |> geojson_translate
+    |> map_keys_to_atom
+    with {:ok, %Partner{} = partner} <- Business.create_partner(partner_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.partner_path(conn, :show, partner))
@@ -39,7 +43,11 @@ defmodule ZxWeb.PartnerController do
   def update(conn, %{"id" => id, "partner" => partner_params}) do
     partner = Business.get_partner!(id)
 
-    with {:ok, %Partner{} = partner} <- Business.update_partner(partner, map_keys_to_atom(partner_params)) do
+    partner_params = partner_params
+    |> geojson_translate
+    |> map_keys_to_atom
+
+    with {:ok, %Partner{} = partner} <- Business.update_partner(partner, partner_params) do
       render(conn, "show.json", partner: partner)
     end
   end

@@ -24,10 +24,6 @@ defmodule ZxWeb do
       import Plug.Conn
       import ZxWeb.Gettext
       alias ZxWeb.Router.Helpers, as: Routes
-
-      def map_keys_to_atom(map) do
-        Map.new(map, fn {k, v} -> {String.to_atom(k), v} end)
-      end
     end
   end
 

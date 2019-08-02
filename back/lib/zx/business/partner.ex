@@ -22,6 +22,7 @@ defmodule Zx.Business.Partner do
     |> put_address(attrs)
     |> put_coverage_area(attrs)
     |> validate_required([:trading_name, :owner_name, :document, :coverage_area, :address])
+    |> unique_constraint(:document, [message: "Document number already exists."])
   end
 
   defp put_address(changeset, %{address: %{"lat" => lat, "lng" => lng}}) do
@@ -33,10 +34,14 @@ defmodule Zx.Business.Partner do
     add_error(changeset, :address, "Invalid Format. Address must be a object with 'lat' and 'lng' properties")
   end
 
-  defp put_coverage_area(changeset, %{coverage_area: [coverage_area]}) do
+  defp put_coverage_area(changeset, %{coverage_area: coverage_area}) do
     if is_list(coverage_area) and Enum.all?(List.flatten(coverage_area), &is_number/1) do
-      coverage_area = Enum.map(coverage_area, fn sublist -> Enum.map(sublist, fn [lat, lng] -> {lat, lng} end) end)
-      change(changeset, coverage_area: %Geo.Polygon{coordinates: coverage_area, srid: 4326 })
+      coverage_area = Enum.map(coverage_area, fn sublist ->
+        Enum.map(sublist, fn subsublist ->
+          Enum.map(subsublist, fn [lat, lng] -> {lat, lng} end)
+        end)
+      end)
+      change(changeset, coverage_area: %Geo.MultiPolygon{coordinates: coverage_area, srid: 4326 })
     else
       add_error(changeset, :coverage_area, "Invalid Format. Coverage Area must be a list of coordinates")
     end
