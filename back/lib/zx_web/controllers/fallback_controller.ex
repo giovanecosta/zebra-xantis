@@ -13,10 +13,10 @@ defmodule ZxWeb.FallbackController do
     |> render(:"404")
   end
 
-  def call(conn, {:error, %Ecto.Changeset{}}) do
+  def call(conn, {:error, changeset = %Ecto.Changeset{}}) do
     conn
     |> put_status(:unprocessable_entity)
     |> put_view(ZxWeb.ErrorView)
-    |> render(:"422")
+    |> render(:"422", %{changeset: changeset})
   end
 end
