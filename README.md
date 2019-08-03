@@ -51,12 +51,12 @@ docker-compose exec back mix test
 ```
 # API Doc
 
-Partner API Documentation can be read here: https://github.com/giovanecosta/zebra-xantis/master/back/docs/api.md
+Partner API Documentation can be read here: https://github.com/giovanecosta/zebra-xantis/blob/master/back/docs/api.md
 
 # Performance
 
 I've written a script that generate 5 million partners in a 4.000.000 Km² square for performance tests.
-![Brazil square area](https://raw.githubusercontent.com/giovanecosta/zebra-xantis/blob/master/square_area.jpeg)
+![Brazil square area](https://raw.githubusercontent.com/giovanecosta/zebra-xantis/master/square_area.jpeg)
 
 To run the script (warning: takes ~ 2 hours to run):
 
