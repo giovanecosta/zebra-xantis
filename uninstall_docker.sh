@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Docker and Docker Compose removing.
+# @author Giovane Costa https://github.com/giovanecosta
+
 read -p  "Do you want to REMOVE Docker and Docker compose? [y/N] " uninstall_docker
 
 if [ "${uninstall_docker,}" == "y" ]; then
@@ -11,7 +14,7 @@ if [ "${uninstall_docker,}" == "y" ]; then
     if [ -x "$(command -v docker)" ]; then
       echo $'Removing Docker...'
 
-      sudo apt-get purge docker-ce docker-ce-cli
+      sudo apt-get purge -y docker-ce docker-ce-cli
       sudo rm -rf /var/lib/docker
 
       echo $'Docker removed!'
