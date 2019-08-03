@@ -55,15 +55,15 @@ Partner API Documentation can be read here: https://github.com/giovanecosta/zebr
 
 # Performance
 
-I've written a script that generate 5 million partners in a 4.000.000 Km² square for performance tests.
+I've written a script that generate 5 million partners in a ~4.300.000 Km² square for performance tests.
 ![Brazil square area](https://raw.githubusercontent.com/giovanecosta/zebra-xantis/master/square_area.jpeg)
 
-To run the script (warning: takes ~ 2 hours to run):
+To run the script (warning: takes ~2 hours to run):
 
 ```
 docker-compose exec back mix run priv/repo/seeds.exs
 ```
-Fortunately, i've already a server running on an AWS t3.micro instance. It can be accessed here:
+Fortunately, i've already have a server running on an AWS t3.micro instance. It can be accessed here:
 
 http://ec2-54-233-183-233.sa-east-1.compute.amazonaws.com:4000/
 
