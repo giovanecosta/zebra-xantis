@@ -21,6 +21,8 @@ defmodule ZxWeb.ConnCase do
       use Phoenix.ConnTest
       alias ZxWeb.Router.Helpers, as: Routes
 
+      import Bureaucrat.Helpers
+
       # The default endpoint for testing
       @endpoint ZxWeb.Endpoint
     end

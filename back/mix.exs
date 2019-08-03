@@ -41,7 +41,8 @@ defmodule Zx.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:geo_postgis, "~> 3.1"}
+      {:geo_postgis, "~> 3.1"},
+      {:bureaucrat, "~> 0.2.5"}
     ]
   end
 

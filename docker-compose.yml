@@ -2,23 +2,12 @@ version: '2'
 
 services:
   postgres:
-    image: 'postgres:10.3-alpine'
+    image: 'mdillon/postgis:10-alpine'
     ports:
       - '5432:5432'
     environment:
       - TZ=America/Sao_Paulo
       - POSTGRES_PASSWORD=postgres
-  front:
-    build:
-      context: front
-    depends_on:
-      - 'back'
-    ports:
-      - '3000:3000'
-    volumes:
-      - './front:/app'
-    entrypoint:
-      'sh -c "tail -f /dev/null"'
   back:
     build:
       context: back

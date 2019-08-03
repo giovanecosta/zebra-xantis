@@ -13,6 +13,8 @@ RUN mkdir /app
 COPY . /app
 WORKDIR /app
 
+RUN mix deps.get
+
 RUN mix do compile
 
 CMD ["mix", "phx.server"]
