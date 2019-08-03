@@ -42,10 +42,6 @@ fi
 echo $'\nSetting Up...\n'
 
 if [ -x "$(command -v docker-compose)" ]; then
-  sudo su -l ubuntu -c 'docker-compose build'
-  sudo su -l ubuntu -c 'docker-compose run --rm --no-deps back deps.get'
-  sudo su -l ubuntu -c 'docker-compose run --rm --no-deps back mix ecto.setup'
-
   echo $'\nSetup finished!!\n'
   echo $'You may need to login again to use docker-compose properly\n'
   echo $'Run docker-compose up to run containers'
