@@ -51,7 +51,7 @@ docker-compose exec back mix test
 ```
 # API Doc
 
-Partner API Documentation can be read here: https://github.com/giovanecosta/zebra-xantis/blob/master/back/docs/api.md
+Partner API Documentation can be read here: https://github.com/giovanecosta/zebra-xantis/master/back/docs/api.md
 
 # Performance
 
@@ -68,4 +68,4 @@ Fortunately, i've already a server running on an AWS t3.micro instance. It can b
 http://ec2-54-233-183-233.sa-east-1.compute.amazonaws.com:4000/
 
 After that, requests with location had the following results:
-![Api response time](https://raw.githubusercontent.com/giovanecosta/zebra-xantis/blob/master/api_response_time.jpeg)
+![Api response time](https://raw.githubusercontent.com/giovanecosta/zebra-xantis/master/api_response_time.jpeg)
